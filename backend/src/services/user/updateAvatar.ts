@@ -10,7 +10,7 @@ export default async function updateAvatar(userId?: string, file?: Express.Multe
   const maxSize = 1 * 1024 * 1024;
   if (file.size > maxSize) throw { message: "File size must be less than 1MB" };
 
-  const { secure_url } = await cloudinaryUpload(file, "jobsdoors");
+  const { secure_url } = await cloudinaryUpload(file, "ConcertHubs");
 
   await prisma.user.update({
     where: { id: userId },

@@ -30,7 +30,8 @@ export default function LoginPage() {
       });
 
       toast.success("Login berhasil!");
-      console.log(response.data);
+      const token = response.data.access_token;
+      localStorage.setItem("authToken", token);
 
       router.push("/");
     } catch (error: any) {
@@ -38,7 +39,9 @@ export default function LoginPage() {
         const status = error.response?.status;
 
         if (status === 400 || status === 401 || status === 404) {
-          toast.error(error.response?.data?.message || "Email atau password salah.");
+          toast.error(
+            error.response?.data?.message || "Email atau password salah."
+          );
         } else {
           toast.error("Terjadi kesalahan server. Coba lagi nanti.");
         }

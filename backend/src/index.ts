@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import cors from "cors";
 import { Application } from "express";
 import { AuthRouter } from "./router/auth.router";
+import { UserRouter } from "./router/user.router";
 // import { ItemRouter } from "./router/item.router";
 
 const PORT: number = 8000;
@@ -16,6 +17,9 @@ app.get("/api", (req: Request, res: Response) => {
 
 const authRouter = new AuthRouter();
 app.use("/api/auth", authRouter.getRouter());
+
+const userRouter = new UserRouter
+app.use("/api/users", userRouter.getRouter())
 
 // const itemRouter = new ItemRouter();
 // app.use("/api/items", itemRouter.getRouter());
