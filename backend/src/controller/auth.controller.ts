@@ -1,0 +1,75 @@
+import { Request, Response } from "express";
+import { registerUserSchema } from "../validation/authSchema";
+import { registerService } from "../services/auth/register";
+import { ValidationError } from "yup";
+import { loginService } from "../services/auth/login";
+import { requestPasswordResetService } from "../services/auth/requestReset";
+import { passwordResetService } from "../services/auth/resetPassword";
+
+export class AuthController {
+  async register(req: Request, res: Response) {
+    try {
+      const validateData = await registerUserSchema.validate(req.body, {
+        abortEarly: false,
+        stripUnknown: true,
+      });
+
+      const user = await registerService(validateData);
+      res.status(200).json(user);
+    } catch (error: any) {
+      if (error instanceof ValidationError) {
+        const errors: Record<string, string> = {};
+        error.inner.forEach((err) => {
+          if (err.path && !errors[err.path]) {
+            errors[err.path] = err.message;
+          }
+        });
+
+        return res.status(400).json({ errors });
+      }
+
+      res.status(error.status || 500).json({ message: error.message });
+    }
+  }
+
+  async login(req: Request, res: Response) {
+    try {
+      const { email, password } = req.body;
+      const result = await loginService({email, password});
+      res.status(200).json(result);
+    } catch (error: any) {
+      res.status(error.status || 500).json({ message: error.message });
+    }
+  }
+
+  async requestPasswordReset(req: Request, res: Response) {
+      try {
+        const { email } = req.body;
+        const result = await requestPasswordResetService(email);
+        res.status(200).json(result);
+      } catch (error: any) {
+        res
+          .status(error.status || 500)
+          .json({ message: error.message || "Internal server error" });
+      }
+    }
+  
+    async passwordReset(req: Request, res: Response) {
+    try {
+      const authHeader = req.headers.authorization;
+      const { newPassword } = req.body;
+  
+      if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        res.status(400).json({ message: "Authorization token is missing or invalid" });
+        return;
+      }
+  
+      const token = authHeader.split(" ")[1];
+  
+      const result = await passwordResetService(token, newPassword);
+      res.status(200).json(result);
+    } catch (error: any) {
+      res.status(error.status || 500).json({ message: error.message || "Internal server error" });
+    }
+  }
+}

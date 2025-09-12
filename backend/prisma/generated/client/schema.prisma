@@ -1,0 +1,77 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/client"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  imageUrl  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Pokemon {
+  id               Int                 @id @default(autoincrement())
+  number           Int                 @unique
+  name             String
+  imageUrl         String?
+  classificationId Int
+  classification   Classification      @relation(fields: [classificationId], references: [id])
+  types            PokemonType[]
+  resistances      PokemonResistance[]
+  evolutions       Evolution[]         @relation("Evolutions")
+  preEvolutions    Evolution[]         @relation("PreEvolutions")
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+}
+
+model Classification {
+  id       Int       @id @default(autoincrement())
+  name     String    @unique
+  pokemons Pokemon[]
+}
+
+model Type {
+  id       Int           @id @default(autoincrement())
+  name     String        @unique
+  pokemons PokemonType[]
+}
+
+model Resistance {
+  id       Int                 @id @default(autoincrement())
+  name     String              @unique
+  pokemons PokemonResistance[]
+}
+
+model PokemonType {
+  id        Int     @id @default(autoincrement())
+  pokemonId Int
+  typeId    Int
+  pokemon   Pokemon @relation(fields: [pokemonId], references: [id])
+  type      Type    @relation(fields: [typeId], references: [id])
+}
+
+model PokemonResistance {
+  id           Int        @id @default(autoincrement())
+  pokemonId    Int
+  resistanceId Int
+  pokemon      Pokemon    @relation(fields: [pokemonId], references: [id])
+  resistance   Resistance @relation(fields: [resistanceId], references: [id])
+}
+
+model Evolution {
+  id            Int     @id @default(autoincrement())
+  fromPokemonId Int
+  toPokemonId   Int
+  fromPokemon   Pokemon @relation("Evolutions", fields: [fromPokemonId], references: [id])
+  toPokemon     Pokemon @relation("PreEvolutions", fields: [toPokemonId], references: [id])
+}
