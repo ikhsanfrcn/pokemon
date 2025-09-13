@@ -62,7 +62,7 @@ export default function ForgotPasswordModal({
               placeholder="Masukkan Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full border rounded-md px-3 py-2"
+              className="w-full bg-[#FFF8F8] rounded-md px-3 py-2"
             />
             <button
               type="button"

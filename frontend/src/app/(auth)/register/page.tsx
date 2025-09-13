@@ -40,14 +40,13 @@ export default function RegisterPage() {
     const email = (form[1] as HTMLInputElement).value;
 
     try {
-      const response = await axios.post("/auth/register", {
+      await axios.post("/auth/register", {
         name,
         email,
         password,
       });
 
       toast.success("Registrasi berhasil!");
-      console.log(response.data);
 
       router.push("/login");
     } catch (error: any) {
@@ -59,17 +58,15 @@ export default function RegisterPage() {
   return (
     <div className="flex min-h-screen items-center justify-center text-black">
       <div className="w-full max-w-md p-6">
-        {/* Logo */}
         <div className="flex justify-center mb-6">
           <Image src="/logo.png" alt="Pokemon" width={200} height={80} />
         </div>
 
-        {/* Card */}
         <div className="border border-gray-300 rounded-md p-6">
           <h2 className="text-red-600 text-lg font-semibold mb-4">Daftar</h2>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Nama */}
+          
             <label
               htmlFor="name"
               className="block text-sm font-medium text-gray-700 mb-1"
@@ -83,7 +80,6 @@ export default function RegisterPage() {
               required
             />
 
-            {/* Email */}
             <label
               htmlFor="email"
               className="block text-sm font-medium text-gray-700 mb-1"
@@ -98,7 +94,6 @@ export default function RegisterPage() {
               required
             />
 
-            {/* Password */}
             <div className="relative">
               <label
                 htmlFor="password"
@@ -110,22 +105,22 @@ export default function RegisterPage() {
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Masukkan Password"
-                className="w-full rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-400 bg-[#FFF8F8]"
+                className="w-full rounded-md px-3 py-2 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-red-400 bg-[#FFF8F8]"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
               <button
                 type="button"
-                className="absolute right-3 top-2 text-gray-500"
+                className="absolute right-3 top-[70%] -translate-y-1/2 flex items-center text-[#E51C23] cursor-pointer"
                 onClick={() => setShowPassword(!showPassword)}
+                tabIndex={-1}
               >
                 {showPassword ? <BiSolidShow /> : <BiSolidHide />}
               </button>
             </div>
 
-            {/* Konfirmasi Password */}
-            <div className="relative">
+            <div className="relative mt-4">
               <label
                 htmlFor="confirmPassword"
                 className="block text-sm font-medium text-gray-700 mb-1"
@@ -135,21 +130,21 @@ export default function RegisterPage() {
               <input
                 type={showConfirmPassword ? "text" : "password"}
                 placeholder="Masukkan Konfirmasi Password"
-                className="w-full rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-400 bg-[#FFF8F8]"
+                className="w-full rounded-md px-3 py-2 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-red-400 bg-[#FFF8F8]"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
               />
               <button
                 type="button"
-                className="absolute right-3 top-2 text-gray-500"
+                className="absolute right-3 top-[70%] -translate-y-1/2 flex items-center text-[#E51C23] cursor-pointer"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                tabIndex={-1}
               >
                 {showConfirmPassword ? <BiSolidShow /> : <BiSolidHide />}
               </button>
             </div>
 
-            {/* Checkbox */}
             <div className="flex items-start text-sm">
               <input
                 type="checkbox"
@@ -167,7 +162,6 @@ export default function RegisterPage() {
               </label>
             </div>
 
-            {/* Button */}
             <button
               type="submit"
               className="w-full bg-red-600 text-white py-2 rounded-md hover:bg-red-700 transition"
@@ -177,7 +171,6 @@ export default function RegisterPage() {
           </form>
         </div>
 
-        {/* Login */}
         <div className="text-center mt-4 text-sm">
           Sudah punya akun?{" "}
           <Link href="/login" className="text-red-600 hover:underline">

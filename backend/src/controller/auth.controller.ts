@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import { registerUserSchema } from "../validation/authSchema";
-import { registerService } from "../services/auth/register";
+import { register } from "../services/auth/register";
 import { ValidationError } from "yup";
-import { loginService } from "../services/auth/login";
-import { requestPasswordResetService } from "../services/auth/requestReset";
-import { passwordResetService } from "../services/auth/resetPassword";
+import { login } from "../services/auth/login";
+import { requestPasswordReset } from "../services/auth/requestReset";
+import { passwordReset } from "../services/auth/resetPassword";
 
 export class AuthController {
   async register(req: Request, res: Response) {
@@ -14,14 +14,14 @@ export class AuthController {
         stripUnknown: true,
       });
 
-      const user = await registerService(validateData);
+      const user = await register(validateData);
       res.status(200).json(user);
     } catch (error: any) {
       if (error instanceof ValidationError) {
         const errors: Record<string, string> = {};
-        error.inner.forEach((err) => {
-          if (err.path && !errors[err.path]) {
-            errors[err.path] = err.message;
+        error.inner.forEach((error) => {
+          if (error.path && !errors[error.path]) {
+            errors[error.path] = error.message;
           }
         });
 
@@ -35,7 +35,7 @@ export class AuthController {
   async login(req: Request, res: Response) {
     try {
       const { email, password } = req.body;
-      const result = await loginService({email, password});
+      const result = await login({ email, password });
       res.status(200).json(result);
     } catch (error: any) {
       res.status(error.status || 500).json({ message: error.message });
@@ -43,33 +43,37 @@ export class AuthController {
   }
 
   async requestPasswordReset(req: Request, res: Response) {
-      try {
-        const { email } = req.body;
-        const result = await requestPasswordResetService(email);
-        res.status(200).json(result);
-      } catch (error: any) {
-        res
-          .status(error.status || 500)
-          .json({ message: error.message || "Internal server error" });
-      }
+    try {
+      const { email } = req.body;
+      const result = await requestPasswordReset(email);
+      res.status(200).json(result);
+    } catch (error: any) {
+      res
+        .status(error.status || 500)
+        .json({ message: error.message || "Internal server error" });
     }
-  
-    async passwordReset(req: Request, res: Response) {
+  }
+
+  async passwordReset(req: Request, res: Response) {
     try {
       const authHeader = req.headers.authorization;
       const { newPassword } = req.body;
-  
+
       if (!authHeader || !authHeader.startsWith("Bearer ")) {
-        res.status(400).json({ message: "Authorization token is missing or invalid" });
+        res
+          .status(400)
+          .json({ message: "Authorization token is missing or invalid" });
         return;
       }
-  
+
       const token = authHeader.split(" ")[1];
-  
-      const result = await passwordResetService(token, newPassword);
+
+      const result = await passwordReset(token, newPassword);
       res.status(200).json(result);
     } catch (error: any) {
-      res.status(error.status || 500).json({ message: error.message || "Internal server error" });
+      res
+        .status(error.status || 500)
+        .json({ message: error.message || "Internal server error" });
     }
   }
 }

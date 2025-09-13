@@ -2,7 +2,7 @@ import prisma from "../../prisma";
 import { sign } from "jsonwebtoken";
 import { sendVerificationEmail } from "../../utils/mailer";
 
-export const requestPasswordResetService = async (email: string) => {
+export const requestPasswordReset = async (email: string) => {
   const user = await prisma.user.findUnique({ where: { email } });
   if (!user) throw { status: 400, message: "User not found" };
 

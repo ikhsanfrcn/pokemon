@@ -1,62 +1,15 @@
-/*
-  Warnings:
+-- CreateTable
+CREATE TABLE "public"."User" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
+    "imageUrl" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
-  - The primary key for the `User` table will be changed. If it partially fails, the table could be left without primary key constraint.
-  - You are about to drop the column `role` on the `User` table. All the data in the column will be lost.
-  - You are about to drop the `Activity` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `Category` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `Comment` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `Favorite` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `Item` table. If the table is not empty, all the data it contains will be lost.
-
-*/
--- DropForeignKey
-ALTER TABLE "public"."Activity" DROP CONSTRAINT "Activity_itemId_fkey";
-
--- DropForeignKey
-ALTER TABLE "public"."Activity" DROP CONSTRAINT "Activity_userId_fkey";
-
--- DropForeignKey
-ALTER TABLE "public"."Comment" DROP CONSTRAINT "Comment_itemId_fkey";
-
--- DropForeignKey
-ALTER TABLE "public"."Comment" DROP CONSTRAINT "Comment_userId_fkey";
-
--- DropForeignKey
-ALTER TABLE "public"."Favorite" DROP CONSTRAINT "Favorite_itemId_fkey";
-
--- DropForeignKey
-ALTER TABLE "public"."Favorite" DROP CONSTRAINT "Favorite_userId_fkey";
-
--- DropForeignKey
-ALTER TABLE "public"."Item" DROP CONSTRAINT "Item_categoryId_fkey";
-
--- AlterTable
-ALTER TABLE "public"."User" DROP CONSTRAINT "User_pkey",
-DROP COLUMN "role",
-ADD COLUMN     "imageUrl" TEXT,
-ALTER COLUMN "id" DROP DEFAULT,
-ALTER COLUMN "id" SET DATA TYPE TEXT,
-ADD CONSTRAINT "User_pkey" PRIMARY KEY ("id");
-DROP SEQUENCE "User_id_seq";
-
--- DropTable
-DROP TABLE "public"."Activity";
-
--- DropTable
-DROP TABLE "public"."Category";
-
--- DropTable
-DROP TABLE "public"."Comment";
-
--- DropTable
-DROP TABLE "public"."Favorite";
-
--- DropTable
-DROP TABLE "public"."Item";
-
--- DropEnum
-DROP TYPE "public"."Role";
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateTable
 CREATE TABLE "public"."Pokemon" (
@@ -123,6 +76,9 @@ CREATE TABLE "public"."Evolution" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "User_email_key" ON "public"."User"("email");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Pokemon_number_key" ON "public"."Pokemon"("number");
 
 -- CreateIndex
@@ -133,6 +89,15 @@ CREATE UNIQUE INDEX "Type_name_key" ON "public"."Type"("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Resistance_name_key" ON "public"."Resistance"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "PokemonType_pokemonId_typeId_key" ON "public"."PokemonType"("pokemonId", "typeId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "PokemonResistance_pokemonId_resistanceId_key" ON "public"."PokemonResistance"("pokemonId", "resistanceId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Evolution_fromPokemonId_toPokemonId_key" ON "public"."Evolution"("fromPokemonId", "toPokemonId");
 
 -- AddForeignKey
 ALTER TABLE "public"."Pokemon" ADD CONSTRAINT "Pokemon_classificationId_fkey" FOREIGN KEY ("classificationId") REFERENCES "public"."Classification"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

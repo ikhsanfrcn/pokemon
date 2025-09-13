@@ -10816,6 +10816,7 @@ export namespace Prisma {
 
   export type PokemonTypeWhereUniqueInput = Prisma.AtLeast<{
     id?: number
+    pokemonId_typeId?: PokemonTypePokemonIdTypeIdCompoundUniqueInput
     AND?: PokemonTypeWhereInput | PokemonTypeWhereInput[]
     OR?: PokemonTypeWhereInput[]
     NOT?: PokemonTypeWhereInput | PokemonTypeWhereInput[]
@@ -10823,7 +10824,7 @@ export namespace Prisma {
     typeId?: IntFilter<"PokemonType"> | number
     pokemon?: XOR<PokemonScalarRelationFilter, PokemonWhereInput>
     type?: XOR<TypeScalarRelationFilter, TypeWhereInput>
-  }, "id">
+  }, "id" | "pokemonId_typeId">
 
   export type PokemonTypeOrderByWithAggregationInput = {
     id?: SortOrder
@@ -10866,6 +10867,7 @@ export namespace Prisma {
 
   export type PokemonResistanceWhereUniqueInput = Prisma.AtLeast<{
     id?: number
+    pokemonId_resistanceId?: PokemonResistancePokemonIdResistanceIdCompoundUniqueInput
     AND?: PokemonResistanceWhereInput | PokemonResistanceWhereInput[]
     OR?: PokemonResistanceWhereInput[]
     NOT?: PokemonResistanceWhereInput | PokemonResistanceWhereInput[]
@@ -10873,7 +10875,7 @@ export namespace Prisma {
     resistanceId?: IntFilter<"PokemonResistance"> | number
     pokemon?: XOR<PokemonScalarRelationFilter, PokemonWhereInput>
     resistance?: XOR<ResistanceScalarRelationFilter, ResistanceWhereInput>
-  }, "id">
+  }, "id" | "pokemonId_resistanceId">
 
   export type PokemonResistanceOrderByWithAggregationInput = {
     id?: SortOrder
@@ -10916,6 +10918,7 @@ export namespace Prisma {
 
   export type EvolutionWhereUniqueInput = Prisma.AtLeast<{
     id?: number
+    fromPokemonId_toPokemonId?: EvolutionFromPokemonIdToPokemonIdCompoundUniqueInput
     AND?: EvolutionWhereInput | EvolutionWhereInput[]
     OR?: EvolutionWhereInput[]
     NOT?: EvolutionWhereInput | EvolutionWhereInput[]
@@ -10923,7 +10926,7 @@ export namespace Prisma {
     toPokemonId?: IntFilter<"Evolution"> | number
     fromPokemon?: XOR<PokemonScalarRelationFilter, PokemonWhereInput>
     toPokemon?: XOR<PokemonScalarRelationFilter, PokemonWhereInput>
-  }, "id">
+  }, "id" | "fromPokemonId_toPokemonId">
 
   export type EvolutionOrderByWithAggregationInput = {
     id?: SortOrder
@@ -11638,6 +11641,11 @@ export namespace Prisma {
     isNot?: TypeWhereInput
   }
 
+  export type PokemonTypePokemonIdTypeIdCompoundUniqueInput = {
+    pokemonId: number
+    typeId: number
+  }
+
   export type PokemonTypeCountOrderByAggregateInput = {
     id?: SortOrder
     pokemonId?: SortOrder
@@ -11673,6 +11681,11 @@ export namespace Prisma {
     isNot?: ResistanceWhereInput
   }
 
+  export type PokemonResistancePokemonIdResistanceIdCompoundUniqueInput = {
+    pokemonId: number
+    resistanceId: number
+  }
+
   export type PokemonResistanceCountOrderByAggregateInput = {
     id?: SortOrder
     pokemonId?: SortOrder
@@ -11701,6 +11714,11 @@ export namespace Prisma {
     id?: SortOrder
     pokemonId?: SortOrder
     resistanceId?: SortOrder
+  }
+
+  export type EvolutionFromPokemonIdToPokemonIdCompoundUniqueInput = {
+    fromPokemonId: number
+    toPokemonId: number
   }
 
   export type EvolutionCountOrderByAggregateInput = {

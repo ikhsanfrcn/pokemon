@@ -4,7 +4,7 @@ import { decodeToken } from "../../utils/decodeToken";
 import { hashPassword } from "../../utils/password";
 import { validatePassword } from "../../utils/validatePassword";
 
-export const passwordResetService = async (token: string, newPassword: string) => {
+export const passwordReset = async (token: string, newPassword: string) => {
   validatePassword(newPassword);
 
   const decoded = decodeToken(token);

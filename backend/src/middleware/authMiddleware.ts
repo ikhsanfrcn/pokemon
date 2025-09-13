@@ -14,7 +14,6 @@ export class AuthMiddleware {
       req.user = verifyUser as UserPayload;
       next();
     } catch (error) {
-      console.log(error);
       res.status(500).json({ error });
     }
   }

@@ -1,113 +1,177 @@
 "use client";
 
 import { useState } from "react";
-import { Eye, EyeOff } from "lucide-react";
+import { BiSolidHide, BiSolidShow } from "react-icons/bi";
 
 interface EditProfileFormProps {
   user: { id: string; name: string; email: string; imageUrl: string | null };
-  onSave: (updatedUser: { id: string; name: string; email: string; imageUrl: string | null }) => void;
+  onSave: (updatedUser: {
+    id: string;
+    name: string;
+    email: string;
+    imageUrl: string | null;
+    oldPassword?: string;
+    newPassword?: string;
+    confirmPassword?: string;
+  }) => Promise<void>; 
   onCancel: () => void;
 }
 
-export default function EditProfileForm({ user, onSave, onCancel }: EditProfileFormProps) {
+export default function EditProfileForm({
+  user,
+  onSave,
+  onCancel,
+}: EditProfileFormProps) {
   const [name, setName] = useState(user.name);
   const [email, setEmail] = useState(user.email);
-  const [imageUrl, setImageUrl] = useState(user.imageUrl || "");
+  const [imageUrl] = useState(user.imageUrl || "");
 
-  // Untuk mengatur tampilan password
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
   const [showPassword, setShowPassword] = useState({
     old: false,
     new: false,
     confirm: false,
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Kirimkan data profil yang telah diperbarui ke parent (ProfilePage)
-    onSave({ id: user.id, name, email, imageUrl });
+    setLoading(true);
+
+    try {
+      await onSave({
+        id: user.id,
+        name,
+        email,
+        imageUrl,
+        oldPassword,
+        newPassword,
+        confirmPassword,
+      });
+    } catch (error) {
+      console.error("Error saving profile:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <h2 className="text-red-600 font-semibold">Profil</h2>
-      <input
-        type="text"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        className="w-full border rounded-md px-3 py-2"
-      />
-      <input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        className="w-full border rounded-md px-3 py-2"
-      />
-
-      <h2 className="text-red-600 font-semibold mt-6">Ubah Password</h2>
-
-      {/* Password Lama */}
-      <div className="relative">
+      <div>
+        <label className="block mb-1 font-medium text-sm">Nama</label>
         <input
-          type={showPassword.old ? "text" : "password"}
-          placeholder="Masukkan Password Lama"
-          className="w-full border rounded-md px-3 py-2 pr-10"
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="w-full rounded-md px-3 py-2 bg-[#FFF8F8]"
         />
-        <button
-          type="button"
-          onClick={() => setShowPassword({ ...showPassword, old: !showPassword.old })}
-          className="absolute right-3 top-2 text-gray-500"
-        >
-          {showPassword.old ? <EyeOff size={18} /> : <Eye size={18} />}
-        </button>
       </div>
 
-      {/* Password Baru */}
-      <div className="relative">
+      <div>
+        <label className="block mb-1 font-medium text-sm">Email</label>
         <input
-          type={showPassword.new ? "text" : "password"}
-          placeholder="Masukkan Password Baru"
-          className="w-full border rounded-md px-3 py-2 pr-10"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="w-full rounded-md px-3 py-2 bg-[#FFF8F8]"
         />
-        <button
-          type="button"
-          onClick={() => setShowPassword({ ...showPassword, new: !showPassword.new })}
-          className="absolute right-3 top-2 text-gray-500"
-        >
-          {showPassword.new ? <EyeOff size={18} /> : <Eye size={18} />}
-        </button>
       </div>
 
-      {/* Konfirmasi Password Baru */}
-      <div className="relative">
-        <input
-          type={showPassword.confirm ? "text" : "password"}
-          placeholder="Masukkan Konfirmasi Password Baru"
-          className="w-full border rounded-md px-3 py-2 pr-10"
-        />
-        <button
-          type="button"
-          onClick={() =>
-            setShowPassword({ ...showPassword, confirm: !showPassword.confirm })
-          }
-          className="absolute right-3 top-2 text-gray-500"
-        >
-          {showPassword.confirm ? <EyeOff size={18} /> : <Eye size={18} />}
-        </button>
+      <h2 className="text-[20px] text-red-600 font-semibold mt-6">
+        Ubah Password
+      </h2>
+
+      <div>
+        <label className="block mb-1 font-medium text-sm">Password Lama</label>
+        <div className="relative">
+          <input
+            type={showPassword.old ? "text" : "password"}
+            value={oldPassword}
+            onChange={(e) => setOldPassword(e.target.value)}
+            placeholder="Masukkan Password Lama"
+            className="w-full bg-[#FFF8F8] rounded-md px-3 py-2 pr-10"
+          />
+          <button
+            type="button"
+            onClick={() =>
+              setShowPassword({ ...showPassword, old: !showPassword.old })
+            }
+            className="absolute right-3 top-[50%] -translate-y-1/2"
+          >
+            {showPassword.old ? <BiSolidShow /> : <BiSolidHide />}
+          </button>
+        </div>
       </div>
 
-      <div className="flex justify-between">
+      <div>
+        <label className="block mb-1 font-medium text-sm">Password Baru</label>
+        <div className="relative">
+          <input
+            type={showPassword.new ? "text" : "password"}
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            placeholder="Masukkan Password Baru"
+            className="w-full bg-[#FFF8F8] rounded-md px-3 py-2 pr-10"
+          />
+          <button
+            type="button"
+            onClick={() =>
+              setShowPassword({ ...showPassword, new: !showPassword.new })
+            }
+            className="absolute right-3 top-[50%] -translate-y-1/2"
+          >
+            {showPassword.new ? <BiSolidShow /> : <BiSolidHide />}
+          </button>
+        </div>
+      </div>
+
+      <div>
+        <label className="block mb-1 font-medium text-sm">
+          Konfirmasi Password Baru
+        </label>
+        <div className="relative">
+          <input
+            type={showPassword.confirm ? "text" : "password"}
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            placeholder="Konfirmasi Password Baru"
+            className="w-full bg-[#FFF8F8] rounded-md px-3 py-2 pr-10"
+          />
+          <button
+            type="button"
+            onClick={() =>
+              setShowPassword({
+                ...showPassword,
+                confirm: !showPassword.confirm,
+              })
+            }
+            className="absolute right-3 top-[50%] -translate-y-1/2"
+          >
+            {showPassword.confirm ? <BiSolidShow /> : <BiSolidHide />}
+          </button>
+        </div>
+      </div>
+
+      <div className="flex justify-between pt-4">
         <button
           type="button"
           onClick={onCancel}
-          className="bg-gray-300 text-black px-4 py-2 rounded-md hover:bg-gray-400"
+          className="bg-gray-300 px-4 py-2 rounded-md cursor-pointer"
         >
           Batal
         </button>
         <button
           type="submit"
-          className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
+          disabled={loading}
+          className={`${
+            loading ? "bg-gray-400" : "bg-red-600 cursor-pointer"
+          } text-white px-4 py-2 rounded-md`}
         >
-          Simpan
+          {loading ? "Memproses..." : "Simpan"}
         </button>
       </div>
     </form>

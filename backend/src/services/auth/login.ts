@@ -3,7 +3,7 @@ import { LoginParams } from "../../types/type";
 import { comparePassword } from "../../utils/password";
 import { generateToken } from "../../utils/token";
 
-export const loginService = async (params: LoginParams) => {
+export const login = async (params: LoginParams) => {
   const user = await prisma.user.findUnique({ where: { email: params.email } });
   if (!user) throw { status: 400, message: "User not found" };
 

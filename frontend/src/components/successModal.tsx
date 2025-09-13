@@ -24,7 +24,7 @@ export default function SuccessModal({
       <button
         type="button"
         onClick={onClose}
-        className="w-full bg-red-600 text-white py-2 rounded-md hover:bg-red-700"
+        className="w-full bg-red-600 text-white py-2 rounded-md hover:bg-red-700 cursor-pointer"
       >
         Tutup
       </button>

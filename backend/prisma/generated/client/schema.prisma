@@ -58,6 +58,8 @@ model PokemonType {
   typeId    Int
   pokemon   Pokemon @relation(fields: [pokemonId], references: [id])
   type      Type    @relation(fields: [typeId], references: [id])
+
+  @@unique([pokemonId, typeId])
 }
 
 model PokemonResistance {
@@ -66,6 +68,8 @@ model PokemonResistance {
   resistanceId Int
   pokemon      Pokemon    @relation(fields: [pokemonId], references: [id])
   resistance   Resistance @relation(fields: [resistanceId], references: [id])
+
+  @@unique([pokemonId, resistanceId])
 }
 
 model Evolution {
@@ -74,4 +78,6 @@ model Evolution {
   toPokemonId   Int
   fromPokemon   Pokemon @relation("Evolutions", fields: [fromPokemonId], references: [id])
   toPokemon     Pokemon @relation("PreEvolutions", fields: [toPokemonId], references: [id])
+
+  @@unique([fromPokemonId, toPokemonId])
 }

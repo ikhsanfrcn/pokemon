@@ -4,7 +4,7 @@ import { RegisterParams } from "../../types/type";
 import { hashPassword } from "../../utils/password";
 import { generateToken } from "../../utils/token";
 
-export const registerService = async (params: RegisterParams) => {
+export const register = async (params: RegisterParams) => {
   await ensureEmailNotExist(params.email);
 
   const hashed = await hashPassword(params.password);

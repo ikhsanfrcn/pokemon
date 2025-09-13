@@ -3,7 +3,10 @@ import cors from "cors";
 import { Application } from "express";
 import { AuthRouter } from "./router/auth.router";
 import { UserRouter } from "./router/user.router";
-// import { ItemRouter } from "./router/item.router";
+import { PokemonRouter } from "./router/pokemon.router";
+import { ClassificationRouter } from "./router/classification.router";
+import { TypeRouter } from "./router/type.router";
+import { ResistanceRouter } from "./router/resistance.router";
 
 const PORT: number = 8000;
 
@@ -18,11 +21,20 @@ app.get("/api", (req: Request, res: Response) => {
 const authRouter = new AuthRouter();
 app.use("/api/auth", authRouter.getRouter());
 
-const userRouter = new UserRouter
-app.use("/api/users", userRouter.getRouter())
+const userRouter = new UserRouter();
+app.use("/api/users", userRouter.getRouter());
 
-// const itemRouter = new ItemRouter();
-// app.use("/api/items", itemRouter.getRouter());
+const pokemonRouter = new PokemonRouter();
+app.use("/api/pokemons", pokemonRouter.getRouter());
+
+const classificationRouter = new ClassificationRouter();
+app.use("/api/classifications", classificationRouter.getRouter());
+
+const typeRouter = new TypeRouter();
+app.use("/api/types", typeRouter.getRouter());
+
+const resistanceRouter = new ResistanceRouter();
+app.use("/api/resistances", resistanceRouter.getRouter());
 
 app.listen(PORT, () => {
   console.log(`Server running http://localhost:${PORT}/api`);

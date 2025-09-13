@@ -2,7 +2,6 @@ import { Router } from "express";
 import { UserController } from "../controller/user.controller";
 import { AuthMiddleware } from "../middleware/authMiddleware";
 import { uploader } from "../helper/uploader";
-import { validateUpdateProfile } from "../middleware/validation";
 
 export class UserRouter {
   private router: Router;
@@ -25,22 +24,19 @@ export class UserRouter {
 
     this.router.put(
       "/profile",
-      validateUpdateProfile,
+      uploader("memoryStorage", "avatar-").single("image"),
       this.authMiddleware.verifyToken,
-      this.userController.updateUser
+      this.userController.updateProfileHandler
     );
 
     this.router.get("/user-email/:email", this.userController.getUserByEmail);
+
     this.router.patch(
-      "/update-avatar",
-      uploader("memoryStorage", "avatar-").single("image"),
+      "/change-password",
       this.authMiddleware.verifyToken,
-      this.userController.updateAvatar
+      this.userController.passwordChange
     );
-
-
-    this.router.patch("/change-password", this.authMiddleware.verifyToken, this.userController.passwordChange);
-    }
+  }
   getRouter(): Router {
     return this.router;
   }
