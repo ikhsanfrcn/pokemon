@@ -17,7 +17,7 @@ export default async function PokemonPage({ params }: { params: { slug: string }
   if (!pokemon) return notFound();
 
   return (
-    <main>
+    <main className="mb-12">
       <PokemonDetail pokemon={pokemon} />
     </main>
   );

@@ -44,7 +44,7 @@ export default function Page() {
   }));
 
   return (
-    <div>
+    <div className="mb-12">
       <Header />
       <div className="px-[142px]">
         <div className="pt-[40px] text-white">

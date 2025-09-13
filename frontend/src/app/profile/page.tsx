@@ -146,7 +146,7 @@ export default function ProfilePage() {
                 src={imagePreview || user.imageUrl || "/default-avatar.png"}
                 alt="Avatar"
                 fill
-                className="rounded-full object-cover"
+                className="object-cover"
               />
             </div>
             {editMode && (

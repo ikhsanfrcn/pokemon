@@ -26,7 +26,7 @@ export default function GeneralInfo({
           type="text"
           value={`#${number}`}
           readOnly
-          className="w-full p-2 border rounded bg-gray-100"
+          className="w-full p-2"
         />
       </div>
 

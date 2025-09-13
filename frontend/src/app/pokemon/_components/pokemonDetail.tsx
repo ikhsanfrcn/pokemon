@@ -77,7 +77,7 @@ export default function PokemonDetail({ pokemon }: { pokemon: PokemonDetail }) {
           )}
         </div>
       </div>
-      <div className="flex flex-col md:flex-row gap-8 px-[146px]">
+      <div className="flex flex-col md:flex-row gap-8 px-[146px] pt-[24px]">
         <div className="w-full md:w-1/3 flex flex-col items-center">
           <div className="relative w-60 h-60">
             <Image
